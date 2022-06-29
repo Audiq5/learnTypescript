@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Perason() {
+            this.name= 'hh'
+            this.age= 19
+            this.fun= function(){ //实例方法
+                // console.log('111111111');
+                return 3
+            }
+        } 
+        const a = new Perason()
+        //1. 原型链添加属性
+        //  原型链上面的属性会被多个实例共享 构造函数不会
+        Perason.prototype.sex= 'man'
+        Perason.prototype.fun1= function(){
+            return this.name +'----'+ this.age
+        }
+        //2. 静态方法 
+        Perason.son = function(){
+            //  console.log(`corder**`+ a.name); //corder**hh
+            //  console.log(`corder**`+ this.name); //corder**Perason
+
+        }
+        Perason.son()
+        // console.log(Perason.son(),a.fun1(),a.sex,a.name);
+        
+        // a.fun()
+        //3. 继承Person类
+        function class1(){
+            //对象冒充实现继承
+            Perason.call(this) 
+        }
+        const a1 = new class1()
+        // 对象冒充继承 可以继承构造函数里面的属性和方法
+        console.log(a1.age);  //19  console.log(a1.name);  //hh    console.log(a1.fun());  //3
+        // 对象冒充可以继承构造函数里面的属性和方法，但不能继承原型链的属性和方法
+        // console.log(a1.fun1());  //not a fun  
+        // 4.原型链继承
+         // 将perason构造函数挂载到class1的原型链上，再new一个class
+         class1.prototype = new Perason() 
+        const c = new class1()
+        console.log(c.name);
+    </script>
+</body>
+
+</html>

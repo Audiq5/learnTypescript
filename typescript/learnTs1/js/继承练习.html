@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // function fun(){
+        //     this.age = 22,
+        //     this.name = 'hh',
+        //     this.job = function() {
+        //         console.log('前端开发');
+        //     }
+        // }
+        function fun(age,name){
+            this.age = age,
+            this.name = name,
+            this.job = function() {
+                console.log('前端开发');
+            }
+        }
+        // 通过prototype往fun原型链上添加属性和方法
+        fun.prototype.height = 176
+        fun.prototype.status = function(){
+            console.log('shit');
+        }
+        const a = new fun()
+        // console.log(a.name); 
+        console.log(a.height);  //176
+        a.status()    // shit
+        // 1.借用对象式继承，只能继承构造函数 无法继承原型链
+        function obj(){
+            fun.call(this)
+            console.log(this);
+        }
+        const objfun = new obj()
+        objfun.job()  // 前端开发
+        console.log(objfun.name); //hh
+        // 不足：无法继承fun的原型链属性和方法
+        console.log(objfun.height); // undefined
+        console.log('-------------------------');
+
+        // 2.原型链式继承 能继承构造函数和原型链，但不能传值
+        function menu(age,name){
+            fun.call(this) 
+        }
+        // 将fun的构造函数指向menu函数的原型链上
+        menu.prototype = new fun()
+        const menuPro = new menu(30,'coderhh')
+        console.log(menuPro.height);   //176
+        // 不足：无法传值  
+        console.log(menuPro.name,menuPro.age); //undenfined undefined 
+    
+        // 3.组合式继承 具备：继承构造函数和原型链，且能够传值
+        function endfun(age,name){
+            fun.call(this,age,name)  //对象冒充式继承
+        }
+        endfun.prototype = new fun()  //
+        const e = new endfun(18,'hh')
+        console.log(e.age,e.name); //18 hh  !!!!!!!!!!!
+        console.log(e.height);
+        // 4.另一种继承方式 ：由于对象冒充式继承了父类构造函数的属性和方法，使用组合式继承时，原型链继承只需要继承父类的原型链继承
+        function realendfun(age,name){
+            fun.call(this,age,name)
+        }
+        realendfun.prototype = fun.prototype  //直接继承了fun的原型链
+        const r = new realendfun(22,'coderhhh')
+        console.log(r.name,r.age);  // coderhhh 22
+    </script>
+</body>
+</html>
